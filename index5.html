@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mi Invitación</title>
+
+    <!-- METATAGS PARA MINIATURA DE WHATSAPP -->
+    <meta property="og:title" content="Mi Invitación">
+    <meta property="og:description" content="¡Estás invitado a mis XV! Haz click para ver los detalles.">
+    <meta property="og:image" content="miniatura.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="300">
+    <meta property="og:image:height" content="300">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background-color: #F5F4F0;
+            font-family: 'Cinzel', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* MARCO DE CELULAR ADAPTABLE */
+        .mobile-screen {
+            width: 100%;
+            max-width: 430px;
+            height: 100vh;
+            height: 100dvh;
+            position: relative;
+            background-color: #F5F4F0;
+            box-shadow: 0 0 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        /* SCROLL INTERIOR SIN BARRA VISIBLE */
+        .invitation-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F5F4F0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .invitation-wrapper.open-portada {
+            opacity: 1;
+        }
+
+        .invitation-wrapper::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        /* ESTILOS DE IMÁGENES */
+        .image-section {
+            width: 100%;
+            background-color: #F5F4F0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .image-section img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* PORTADA */
+        .portada-section {
+            min-height: 100vh;
+            min-height: 100dvh;
+            width: 100%;
+        }
+
+        .portada-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+            transform: translateY(0);
+            transition: transform 1.8s ease-out, opacity 1.8s ease-out;
+        }
+
+        .open-portada .portada-section img {
+            opacity: 1;
+            animation: floatPortada 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatPortada {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-6px) scale(1.005); }
+        }
+
+        /* ESTILOS DEL CONTADOR */
+        .contador-section {
+            width: 100%;
+            padding: 30px 15px 40px 15px;
+            text-align: center;
+            background-color: #F5F4F0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .tiempo {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .unidad {
+            min-width: 70px;
+        }
+
+        .numero {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 50px;
+            line-height: 1;
+            color: #6F4E37;
+            font-weight: 600;
+        }
+
+        .texto {
+            margin-top: 7px;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #8B5A2B;
+        }
+
+        .separador {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 40px;
+            color: #A67B5B;
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        /* SECCIÓN BOTÓN DE UBICACIÓN */
+        .location-button-section {
+            width: 100%;
+            padding: 15px 20px 45px 20px;
+            background-color: #F5F4F0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-location {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #7E1D1E;
+            color: #F3E5AB;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            border: 1px solid #D4AF37;
+            box-shadow: 0 4px 15px rgba(126, 29, 30, 0.4), 0 0 20px rgba(126, 29, 30, 0.3);
+            animation: glowGlowRed 2.5s infinite alternate;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes glowGlowRed {
+            0% {
+                box-shadow: 0 4px 12px rgba(126, 29, 30, 0.4), 0 0 10px rgba(212, 175, 55, 0.2);
+            }
+            100% {
+                box-shadow: 0 6px 20px rgba(126, 29, 30, 0.8), 0 0 25px rgba(212, 175, 55, 0.5);
+            }
+        }
+
+        .btn-location:active {
+            transform: scale(0.96);
+        }
+
+        .btn-location svg {
+            width: 16px;
+            height: 16px;
+            fill: #F3E5AB;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5));
+        }
+
+        /* SECCIÓN DE FORMULARIO DE ASISTENCIA */
+        .asistencia-form-section {
+            width: 100%;
+            padding: 10px 20px 60px 20px;
+            background-color: #F5F4F0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .tarjeta-asistencia {
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid #c9a24e;
+            border-radius: 25px;
+            padding: 30px 20px;
+            box-shadow: 0 15px 45px rgba(90, 37, 37, 0.15);
+        }
+
+        .bloque-persona {
+            border-top: 1px dashed #d8c0ad;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .grupo {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .etiqueta {
+            display: block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            color: #7E1D1E;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .asistencia-form-section input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid #d8c0ad;
+            background: #fffaf5;
+            outline: none;
+            font-family: 'Montserrat', sans-serif;
+            color: #5a2525;
+            font-size: 13px;
+        }
+
+        .opciones {
+            display: flex;
+            gap: 6px;
+        }
+
+        .opcion {
+            flex: 1;
+        }
+
+        .opcion input {
+            display: none;
+        }
+
+        .opcion label {
+            display: block;
+            text-align: center;
+            padding: 12px 4px;
+            border: 1px solid #d8c0ad;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 12px;
+            background: #fffaf5;
+            transition: .2s;
+            color: #5a2525;
+        }
+
+        .opcion input:checked + label {
+            background: #f2ddd4;
+            border-color: #7E1D1E;
+            color: #7E1D1E;
+            font-weight: 600;
+        }
+
+        .boton-confirmar {
+            width: 100%;
+            border: 0;
+            border-radius: 30px;
+            padding: 15px;
+            background: #7E1D1E;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            border: 1px solid #D4AF37;
+            box-shadow: 0 4px 15px rgba(126, 29, 30, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .boton-confirmar:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .mensaje {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 15px;
+            background: #fff7f2;
+            border: 1px solid #d9bda8;
+            line-height: 1.5;
+            font-size: 13px;
+            color: #5a2525;
+        }
+
+        .mensaje.visible {
+            display: block;
+        }
+
+        .pase-tarjeta {
+            margin-top: 20px;
+        }
+
+        .contenidoPase {
+            position: relative;
+            width: 100%;
+            padding: 30px 18px;
+            text-align: center;
+            border: 2px solid #c9a24e;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #fffdf9, #faf0e8, #f3e3da);
+            box-shadow: 0 10px 30px rgba(128,72,89,.12);
+        }
+
+        .contenidoPase::before {
+            content: "✦";
+            display: block;
+            font-size: 18px;
+            color: #c9a24e;
+            margin-bottom: 8px;
+        }
+
+        .pase-titulo {
+            font-family: 'Cormorant Garamond', serif;
+            color: #c9a24e;
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0 0 14px;
+        }
+
+        .pase-nombre {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 500;
+            color: #652b2b;
+            margin: 14px 0 20px;
+            line-height: 1.25;
+        }
+
+        .pase-linea {
+            width: 80px;
+            height: 1px;
+            background: #c9a24e;
+            margin: 0 auto 18px;
+        }
+
+        .codigo {
+            display: inline-block;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 5px;
+            color: #c9a24e;
+            padding: 8px 14px;
+            border-top: 1px solid #c9a24e;
+            border-bottom: 1px solid #c9a24e;
+        }
+
+        .codigo-texto {
+            margin-top: 10px;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #c9a24e;
+        }
+
+        .boton-descargar {
+            width: 100%;
+            border: 1px solid #c9a24e;
+            border-radius: 30px;
+            padding: 12px 18px;
+            margin-top: 12px;
+            background: #7E1D1E;
+            color: #fffaf2;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(120,75,35,.15);
+            transition: all .2s ease;
+        }
+
+        .boton-descargar:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 7px 18px rgba(120,75,35,.22);
+        }
+
+        /* ESTILOS DEL CARRUSEL DE FOTOS */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .slider-container img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+            border-radius: 0;
+        }
+
+        .slider-container img.active {
+            opacity: 1;
+        }
+
+        /* ANIMACIÓN DE ENTRADA GENERAL AL HACER SCROLL */
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(40px) scale(0.97);
+            transition: opacity 1.4s ease-out, transform 1.4s ease-out;
+        }
+
+        .reveal-section.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* ANIMACIÓN ESPECIAL DE ENTRADA PARA LA GALERÍA Y CARRUSEL */
+        .gallery-reveal {
+            opacity: 0;
+            transform: translateY(60px) scale(0.88);
+            transition: opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1), transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .gallery-reveal.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* SOBRE DE INVITACIÓN DE ALTURA COMPLETA */
+        .envelope-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            cursor: pointer;
+            perspective: 1200px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #F5F4F0;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('sobre.jpg');
+            background-size: cover;
+            background-position: center;
+            backface-visibility: hidden;
+            transition: transform 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .envelope-flap-top {
+            clip-path: polygon(0 0, 100% 0, 50% 50%);
+            transform-origin: top;
+            z-index: 5;
+        }
+
+        .envelope-flap-bottom {
+            clip-path: polygon(0 100%, 100% 100%, 50% 50%);
+            transform-origin: bottom;
+            z-index: 3;
+        }
+
+        .envelope-flap-left {
+            clip-path: polygon(0 0, 0 100%, 50% 50%);
+            transform-origin: left;
+            z-index: 2;
+        }
+
+        .envelope-flap-right {
+            clip-path: polygon(100% 0, 100% 100%, 50% 50%);
+            transform-origin: right;
+            z-index: 2;
+        }
+
+        /* BOTÓN EN EL SOBRE */
+        .center-group {
+            position: absolute;
+            top: 61.5%;
+            left: 66%;
+            transform: translate(-50%, -50%);
+            z-index: 6;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .view-text {
+            font-size: 11px;
+            color: #F3E5AB;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            background-color: #7E1D1E;
+            padding: 10px 22px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid #D4AF37;
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+
+        .open .envelope-flap-top { transform: rotateX(180deg); }
+        .open .envelope-flap-bottom { transform: rotateX(-180deg); }
+        .open .envelope-flap-left { transform: rotateY(-180deg); }
+        .open .envelope-flap-right { transform: rotateY(180deg); }
+
+        .open .center-group {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.85);
+            visibility: hidden;
+        }
+
+        .open.envelope-container {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 1.2s ease 1s, visibility 1.2s ease 1s;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="mobile-screen">
+
+    <!-- AUDIO CON EL NOMBRE 'cancion.mp3' -->
+    <audio id="bg-music" src="cancion.mp3" loop></audio>
+
+    <div class="invitation-wrapper" id="invitation">
+
+        <!-- 1. FOTO DE PORTADA -->
+        <div class="image-section portada-section">
+            <img src="portada.jpg" alt="Portada">
+        </div>
+
+        <!-- 2. FOTO DE FECHA -->
+        <div class="image-section reveal-section">
+            <img src="fecha.jpg" alt="Fecha">
+        </div>
+
+        <!-- 3. CONTADOR DE TIEMPO -->
+        <div class="contador-section reveal-section">
+            <div class="tiempo">
+                <div class="unidad">
+                    <div class="numero" id="dias">00</div>
+                    <div class="texto">Días</div>
+                </div>
+
+                <div class="separador">:</div>
+
+                <div class="unidad">
+                    <div class="numero" id="horas">00</div>
+                    <div class="texto">Horas</div>
+                </div>
+
+                <div class="separador">:</div>
+
+                <div class="unidad">
+                    <div class="numero" id="minutos">00</div>
+                    <div class="texto">Minutos</div>
+                </div>
+
+                <div class="separador">:</div>
+
+                <div class="unidad">
+                    <div class="numero" id="segundos">00</div>
+                    <div class="texto">Segundos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. FOTO Y UBICACIÓN DE CEREMONIA -->
+        <div class="image-section reveal-section">
+            <img src="ceremonia.jpg" alt="Ceremonia">
+        </div>
+
+        <div class="location-button-section reveal-section">
+            <a href="https://www.google.com/maps/place/Parroquia+Sagrado+Coraz%C3%B3n+de+Jes%C3%B3s/@23.2170682,-106.4167919,17z/data=!3m1!4b1!4m6!3m5!1s0x869f53a1aa5506cf:0xe7ac4599132eb4fc!8m2!3d23.2170682!4d-106.414217!16s%2Fg%2F1tfwdycd?entry=ttu&g_ep=EgoyMDI2MDkxNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="btn-location">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                Ver ubicación
+            </a>
+        </div>
+
+        <!-- 5. FOTO Y UBICACIÓN DE RECEPCIÓN -->
+        <div class="image-section reveal-section">
+            <img src="recepcion.jpg" alt="Recepción">
+        </div>
+
+        <div class="location-button-section reveal-section">
+            <a href="https://www.google.com/maps/place/Amber+Salon+de+Eventos+Jard%C3%ADn/@23.2657692,-106.4029038,17z/data=!3m1!4b1!4m6!3m5!1s0x869f5300153c0437:0xda88b61c63563d25!8m2!3d23.2657692!4d-106.4003289!16s%2Fg%2F11m5j90y3c?entry=ttu&g_ep=EgoyMDI2MDkxNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="btn-location">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                Ver ubicación
+            </a>
+        </div>
+
+        <!-- 6. IMAGEN DE GALERÍA DE FOTOS -->
+        <div class="image-section gallery-reveal">
+            <img src="galeria.jpg" alt="Galería de Fotos">
+        </div>
+
+        <!-- 7. CARRUSEL DE FOTOS NUEVAS -->
+        <div class="gallery-reveal">
+            <div class="slider-container">
+                <img src="https://i.imgur.com/4NYjYye.jpeg" class="active">
+                <img src="https://i.imgur.com/QIH0Gy9.jpeg">
+                <img src="https://i.imgur.com/o11na25.jpeg">
+                <img src="https://i.imgur.com/OST1M7N.jpeg">
+                <img src="https://i.imgur.com/WlXVrnq.jpeg">
+                <img src="https://i.imgur.com/F4BMtAq.jpeg">
+                <img src="https://i.imgur.com/VIO4RlW.jpeg">
+            </div>
+        </div>
+
+        <!-- 8. FOTO DE VESTIMENTA -->
+        <div class="image-section reveal-section">
+            <img src="vestimenta.jpg" alt="Vestimenta">
+        </div>
+
+        <!-- 9. FOTO DE REGALO -->
+        <div class="image-section reveal-section">
+            <img src="regalo.jpg" alt="Regalo">
+        </div>
+
+        <!-- 10. FOTO DE NIÑOS -->
+        <div class="image-section reveal-section">
+            <img src="ninos.jpg" alt="Niños">
+        </div>
+
+        <!-- 11. FOTO DE ASISTENCIA -->
+        <div class="image-section reveal-section">
+            <img src="asistencia.jpg" alt="Asistencia">
+        </div>
+
+        <!-- 12. FORMULARIO DE ASISTENCIA DIRECTO -->
+        <div class="asistencia-form-section reveal-section">
+            <div class="tarjeta-asistencia">
+
+                <!-- SELECCIÓN DE CANTIDAD (1 A 5 PERSONAS) -->
+                <div class="grupo">
+                    <label class="etiqueta">¿Cuántas personas confirman?</label>
+                    <div class="opciones">
+                        <div class="opcion">
+                            <input type="radio" name="cantidad" id="cant1" value="1" checked onchange="cambiarCantidad(1)">
+                            <label for="cant1">1</label>
+                        </div>
+                        <div class="opcion">
+                            <input type="radio" name="cantidad" id="cant2" value="2" onchange="cambiarCantidad(2)">
+                            <label for="cant2">2</label>
+                        </div>
+                        <div class="opcion">
+                            <input type="radio" name="cantidad" id="cant3" value="3" onchange="cambiarCantidad(3)">
+                            <label for="cant3">3</label>
+                        </div>
+                        <div class="opcion">
+                            <input type="radio" name="cantidad" id="cant4" value="4" onchange="cambiarCantidad(4)">
+                            <label for="cant4">4</label>
+                        </div>
+                        <div class="opcion">
+                            <input type="radio" name="cantidad" id="cant5" value="5" onchange="cambiarCantidad(5)">
+                            <label for="cant5">5</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PERSONA 1 -->
+                <div class="bloque-persona" id="bloquePersona1">
+                    <div class="grupo">
+                        <label class="etiqueta" id="labelP1">Nombre completo</label>
+                        <input id="nombre1" type="text" placeholder="Nombre y dos apellidos" autocomplete="name">
+                    </div>
+                    <div class="grupo">
+                        <label class="etiqueta">Asistencia</label>
+                        <div class="opciones">
+                            <div class="opcion">
+                                <input type="radio" name="asistencia1" id="si1" value="SI">
+                                <label for="si1">Sí asistiré</label>
+                            </div>
+                            <div class="opcion">
+                                <input type="radio" name="asistencia1" id="no1" value="NO">
+                                <label for="no1">No asistiré</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PERSONA 2 -->
+                <div class="bloque-persona" id="bloquePersona2" style="display: none;">
+                    <div class="grupo">
+                        <label class="etiqueta">Nombre completo (Persona 2)</label>
+                        <input id="nombre2" type="text" placeholder="Nombre y dos apellidos" autocomplete="name">
+                    </div>
+                    <div class="grupo">
+                        <label class="etiqueta">Asistencia</label>
+                        <div class="opciones">
+                            <div class="opcion">
+                                <input type="radio" name="asistencia2" id="si2" value="SI">
+                                <label for="si2">Sí asistiré</label>
+                            </div>
+                            <div class="opcion">
+                                <input type="radio" name="asistencia2" id="no2" value="NO">
+                                <label for="no2">No asistiré</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PERSONA 3 -->
+                <div class="bloque-persona" id="bloquePersona3" style="display: none;">
+                    <div class="grupo">
+                        <label class="etiqueta">Nombre completo (Persona 3)</label>
+                        <input id="nombre3" type="text" placeholder="Nombre y dos apellidos" autocomplete="name">
+                    </div>
+                    <div class="grupo">
+                        <label class="etiqueta">Asistencia</label>
+                        <div class="opciones">
+                            <div class="opcion">
+                                <input type="radio" name="asistencia3" id="si3" value="SI">
+                                <label for="si3">Sí asistiré</label>
+                            </div>
+                            <div class="opcion">
+                                <input type="radio" name="asistencia3" id="no3" value="NO">
+                                <label for="no3">No asistiré</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PERSONA 4 -->
+                <div class="bloque-persona" id="bloquePersona4" style="display: none;">
+                    <div class="grupo">
+                        <label class="etiqueta">Nombre completo (Persona 4)</label>
+                        <input id="nombre4" type="text" placeholder="Nombre y dos apellidos" autocomplete="name">
+                    </div>
+                    <div class="grupo">
+                        <label class="etiqueta">Asistencia</label>
+                        <div class="opciones">
+                            <div class="opcion">
+                                <input type="radio" name="asistencia4" id="si4" value="SI">
+                                <label for="si4">Sí asistiré</label>
+                            </div>
+                            <div class="opcion">
+                                <input type="radio" name="asistencia4" id="no4" value="NO">
+                                <label for="no4">No asistiré</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PERSONA 5 -->
+                <div class="bloque-persona" id="bloquePersona5" style="display: none;">
+                    <div class="grupo">
+                        <label class="etiqueta">Nombre completo (Persona 5)</label>
+                        <input id="nombre5" type="text" placeholder="Nombre y dos apellidos" autocomplete="name">
+                    </div>
+                    <div class="grupo">
+                        <label class="etiqueta">Asistencia</label>
+                        <div class="opciones">
+                            <div class="opcion">
+                                <input type="radio" name="asistencia5" id="si5" value="SI">
+                                <label for="si5">Sí asistiré</label>
+                            </div>
+                            <div class="opcion">
+                                <input type="radio" name="asistencia5" id="no5" value="NO">
+                                <label for="no5">No asistiré</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="boton-confirmar" id="boton" onclick="enviar()">Enviar confirmación</button>
+
+                <div id="mensaje" class="mensaje"></div>
+                <div id="pasesContenedor"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SOBRE -->
+    <div class="envelope-container" id="envelope" onclick="openEnvelope()">
+        <div class="flap envelope-flap-top"></div>
+        <div class="flap envelope-flap-bottom"></div>
+        <div class="flap envelope-flap-left"></div>
+        <div class="flap envelope-flap-right"></div>
+
+        <div class="center-group">
+            <div class="view-text">
+                Ver invitación
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let isOpen = false;
+    const music = document.getElementById("bg-music");
+    const wrapper = document.getElementById("invitation");
+
+    function openEnvelope() {
+        if (!isOpen) {
+            isOpen = true;
+            document.getElementById("envelope").classList.add("open");
+            wrapper.classList.add("open-portada");
+            
+            var playPromise = music.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(function(error) {
+                    console.log("Reproducción bloqueada por el navegador:", error);
+                });
+            }
+
+            checkScroll();
+        }
+    }
+
+    function checkScroll() {
+        const reveals = document.querySelectorAll('.reveal-section, .gallery-reveal');
+        const triggerBottom = wrapper.clientHeight * 0.9;
+
+        reveals.forEach(section => {
+            const sectionTop = section.getBoundingClientRect().top;
+            if (sectionTop < triggerBottom) {
+                section.classList.add('visible');
+            }
+        });
+    }
+
+    wrapper.addEventListener('scroll', checkScroll);
+
+    /* LÓGICA DEL CARRUSEL DE IMÁGENES */
+    const images = document.querySelectorAll('.slider-container img');
+    let current = 0;
+
+    setInterval(() => {
+        images[current].classList.remove('active');
+        current = (current + 1) % images.length;
+        images[current].classList.add('active');
+    }, 3000);
+
+    /* LÓGICA DEL CONTADOR DE TIEMPO */
+    const fechaEvento = new Date("October 19, 2026 17:00:00").getTime();
+
+    function actualizarContador() {
+        const ahora = new Date().getTime();
+        const diferencia = fechaEvento - ahora;
+
+        if (diferencia <= 0) {
+            document.getElementById("dias").innerHTML = "00";
+            document.getElementById("horas").innerHTML = "00";
+            document.getElementById("minutos").innerHTML = "00";
+            document.getElementById("segundos").innerHTML = "00";
+            return;
+        }
+
+        const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+        const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutos = Math.floor((diferencia % (1000 * 60)) / (1000 * 60));
+        const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+        document.getElementById("dias").innerHTML = String(dias).padStart(2, "0");
+        document.getElementById("horas").innerHTML = String(horas).padStart(2, "0");
+        document.getElementById("minutos").innerHTML = String(minutos).padStart(2, "0");
+        document.getElementById("segundos").innerHTML = String(segundos).padStart(2, "0");
+    }
+
+    actualizarContador();
+    setInterval(actualizarContador, 1000);
+
+    /* LÓGICA DE CONFIRMACIÓN DE ASISTENCIA (SOPORTA HASTA 5 PERSONAS) */
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzb1UuKbIgKolstrO55twS_3qxexE9i8KsopjZ-RS5_uThYOEv8Qme02mpNdoIw_Moz7w/exec';
+
+    function cambiarCantidad(num) {
+      const l1 = document.getElementById('labelP1');
+      l1.textContent = num === 1 ? 'Nombre completo' : 'Nombre completo (Persona 1)';
+
+      for (let i = 2; i <= 5; i++) {
+        const bloque = document.getElementById(`bloquePersona${i}`);
+        bloque.style.display = (i <= num) ? 'block' : 'none';
+      }
+    }
+
+    function llamarAPI(parametros) {
+      return new Promise((resolve, reject) => {
+        const callback = 'cb_' + Date.now() + '_' + Math.floor(Math.random() * 9999);
+        const script = document.createElement('script');
+        const query = new URLSearchParams({ ...parametros, callback });
+        const tiempo = setTimeout(() => { limpiar(); reject(); }, 15000);
+
+        window[callback] = function(data) {
+          clearTimeout(tiempo);
+          limpiar();
+          resolve(data);
+        };
+
+        function limpiar() {
+          delete window[callback];
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        script.onerror = function() {
+          clearTimeout(tiempo);
+          limpiar();
+          reject();
+        };
+
+        script.src = API_URL + '?' + query.toString();
+        document.body.appendChild(script);
+      });
+    }
+
+    async function enviar() {
+      const mensaje = document.getElementById('mensaje');
+      const pasesContenedor = document.getElementById('pasesContenedor');
+      const boton = document.getElementById('boton');
+      const cantidad = parseInt(document.querySelector('input[name="cantidad"]:checked').value);
+
+      const datosPersonas = [];
+
+      for (let i = 1; i <= cantidad; i++) {
+        const nombre = document.getElementById(`nombre${i}`).value.trim();
+        const asistencia = document.querySelector(`input[name="asistencia${i}"]:checked`)?.value || '';
+
+        if (!nombre) {
+          mostrarMensaje(`Escribe el nombre completo de la persona ${i}.`);
+          return;
+        }
+        if (nombre.split(/\s+/).length < 3) {
+          mostrarMensaje(`Escribe el nombre y dos apellidos de la persona ${i}.`);
+          return;
+        }
+        if (!asistencia) {
+          mostrarMensaje(`Selecciona la asistencia de la persona ${i}.`);
+          return;
+        }
+
+        datosPersonas.push({ nombre, asistencia });
+      }
+
+      boton.disabled = true;
+      boton.textContent = 'Enviando...';
+      mensaje.className = 'mensaje';
+      pasesContenedor.innerHTML = '';
+
+      try {
+        const params = {
+          accion: 'confirmar',
+          cantidad: cantidad
+        };
+
+        datosPersonas.forEach((p, idx) => {
+          params[`invitado${idx + 1}`] = p.nombre;
+          params[`asistencia${idx + 1}`] = p.asistencia;
+        });
+
+        const respuesta = await llamarAPI(params);
+
+        if (!respuesta.ok) {
+          mostrarMensaje(respuesta.mensaje);
+          return;
+        }
+
+        const vanAsistir = datosPersonas.some(p => p.asistencia === 'SI');
+
+        if (!vanAsistir) {
+          mostrarMensaje('Lamentamos que no puedan acompañarnos, gracias por avisar.');
+        } else {
+          mostrarMensaje(respuesta.mensaje || '¡Gracias por confirmar tu asistencia!');
+        }
+
+        if (respuesta.listaPases && respuesta.listaPases.length > 0) {
+          let contadorPases = 0;
+
+          datosPersonas.forEach((persona) => {
+            if (persona.asistencia === 'SI') {
+              const pase = respuesta.listaPases.find(p => p.nombre.toLowerCase().includes(persona.nombre.toLowerCase())) 
+                         || respuesta.listaPases[contadorPases];
+              
+              if (pase) {
+                agregarPaseHTML(pasesContenedor, pase, contadorPases);
+                contadorPases++;
+              }
+            }
+          });
+        }
+
+      } catch (error) {
+        console.error(error);
+        mostrarMensaje('No se pudo conectar con el sistema.');
+      } finally {
+        boton.disabled = false;
+        boton.textContent = 'Enviar confirmación';
+      }
+    }
+
+    function agregarPaseHTML(contenedor, pase, index) {
+      contenedor.innerHTML += `
+        <div class="pase-tarjeta">
+          <div id="contenidoPase_${index}" class="contenidoPase">
+            <div class="pase-titulo">Pase de entrada</div>
+            <div class="pase-linea"></div>
+            <div class="pase-nombre">${escapar(pase.nombre)}</div>
+            <div class="codigo">${escapar(pase.codigo)}</div>
+            <div class="codigo-texto">Código de acceso</div>
+          </div>
+          <button type="button" class="boton-descargar" onclick="descargarPase('contenidoPase_${index}', '${escapar(pase.nombre)}')">
+            Descargar pase de ${escapar(pase.nombre.split(' ')[0])}
+          </button>
+        </div>
+      `;
+    }
+
+    function mostrarMensaje(texto) {
+      const mensaje = document.getElementById('mensaje');
+      mensaje.className = 'mensaje visible';
+      mensaje.textContent = texto;
+    }
+
+    async function descargarPase(idContenido, nombreInvitado) {
+      const contenido = document.getElementById(idContenido);
+      if (!contenido) return;
+
+      const btn = event.target;
+      const textoOriginal = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Preparando pase...';
+
+      try {
+        if (!window.html2canvas) {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+        }
+
+        const canvas = await html2canvas(contenido, {
+          scale: 3,
+          backgroundColor: '#fffaf5',
+          useCORS: true,
+          logging: false,
+          imageTimeout: 15000
+        });
+
+        canvas.toBlob(function(blob) {
+          if (!blob) throw new Error('No se pudo generar la imagen.');
+          const url = URL.createObjectURL(blob);
+          const enlace = document.createElement('a');
+          enlace.href = url;
+          enlace.download = 'Pase-' + limpiarNombreArchivo(nombreInvitado) + '.png';
+          document.body.appendChild(enlace);
+          enlace.click();
+          document.body.removeChild(enlace);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }, 'image/png');
+
+      } catch (error) {
+        console.error(error);
+        alert('No se pudo descargar el pase. Intenta nuevamente.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = textoOriginal;
+      }
+    }
+
+    function limpiarNombreArchivo(nombre) {
+      return nombre
+        .replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g, '')
+        .replace(/\s+/g, '-')
+        .substring(0, 50) || 'Invitado';
+    }
+
+    function escapar(texto) {
+      return String(texto)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+</script>
+
+</body>
+</html>
